@@ -8,7 +8,7 @@ import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Divider, Drawer, useMediaQuery} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {logout} from "../State/Authentication/Action";
+import {logout} from "../../State/Authentication/Action";
 import {useDispatch} from "react-redux";
 
 

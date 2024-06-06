@@ -7,13 +7,12 @@ import {
     REGISTER_REQUEST,
     REGISTER_SUCCESS
 } from "./ActionType";
-import {api, API_URL} from "../../config/api";
-import axios from "axios";
+import {api, API_URL} from "../../component/config/api";
 
 export const registerUser=(reqData)=>async(dispatch)=>{
     dispatch({type: REGISTER_REQUEST})
     try{
-        const {data}=await axios.post(`${API_URL}/auth/signup`,reqData.userData);
+        const {data}=await api.post(`${API_URL}/auth/signup`,reqData.userData);
         if(data.jwt)localStorage.setItem("jwt",data.jwt);
         if(data.role=== "ROLE_RESTAURANT_OWNER"){
             reqData.navigate("/admin/restaurant");
@@ -32,7 +31,7 @@ export const registerUser=(reqData)=>async(dispatch)=>{
 export const loginUser=(reqData)=>async(dispatch)=>{
     dispatch({type: LOGIN_REQUEST})
     try{
-        const {data}=await axios.post(`${API_URL}/auth/signin`,reqData.userData);
+        const {data}=await api.post(`${API_URL}/auth/signin`,reqData.userData);
         if(data.jwt)localStorage.setItem("jwt",data.jwt);
         if(data.role=== "ROLE_RESTAURANT_OWNER"){
             reqData.navigate("/admin/restaurant");

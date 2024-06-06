@@ -5,7 +5,7 @@ import {darkTheme} from "./Theme/DarkTheme";
 import CustomerRouter from "./Routers/CustomerRouter";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {getUser} from "./component/State/Authentication/Action";
+import {getUser} from "./State/Authentication/Action";
 
 function App() {
     const dispatch = useDispatch();
