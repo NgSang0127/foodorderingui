@@ -28,24 +28,35 @@ export const registerUser=(reqData)=>async(dispatch)=>{
     }
 }
 
-export const loginUser=(reqData)=>async(dispatch)=>{
-    dispatch({type: LOGIN_REQUEST})
-    try{
-        const {data}=await api.post(`${API_URL}/auth/signin`,reqData.userData);
-        if(data.jwt)localStorage.setItem("jwt",data.jwt);
-        if(data.role=== "ROLE_RESTAURANT_OWNER"){
+export const loginUser = (reqData) => async (dispatch) => {
+    dispatch({ type: LOGIN_REQUEST });
+    try {
+        const { data } = await api.post(`${API_URL}/auth/signin`, reqData.userData);
+        if (data.jwt) localStorage.setItem("jwt", data.jwt);
+        if (data.role === "ROLE_RESTAURANT_OWNER") {
             reqData.navigate("/admin/restaurant");
-        }else{
-            reqData.navigate("/")
+        } else {
+            reqData.navigate("/");
         }
-        dispatch({type:LOGIN_SUCCESS,payload:data.jwt});
-        console.log("Login successful",data);
-
-    }catch(error){
-        dispatch({type:LOGIN_FAILURE,payload:error})
-        console.log("Error",error);
+        dispatch({ type: LOGIN_SUCCESS, payload: data.jwt });
+        console.log("Login successful", data);
+    } catch (error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            dispatch({ type: LOGIN_FAILURE, payload: error.response.data.message });
+            console.error("Error in loginUser:", error.response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            dispatch({ type: LOGIN_FAILURE, payload: "No response received from server" });
+            console.error("Error in loginUser:", error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            dispatch({ type: LOGIN_FAILURE, payload: error.message });
+            console.error("Error in loginUser:", error.message);
+        }
     }
-}
+};
 
 export const getUser=(jwt)=>async(dispatch)=>{
     dispatch({type: GET_USER_REQUEST})
@@ -67,7 +78,7 @@ export const getUser=(jwt)=>async(dispatch)=>{
 export const addToFavorite=({jwt,restaurantId})=>async(dispatch)=>{
     dispatch({type: ADD_TO_FAVORITE_REQUEST})
     try{
-        const {data}=await api.put(`/aoi/restaurants/${restaurantId}/add-favorite`,{},{
+        const {data}=await api.put(`/api/restaurants/${restaurantId}/add-favorites`,{},{
             headers:{
                 Authorization:`Bearer ${jwt}`
             }

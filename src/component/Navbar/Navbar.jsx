@@ -8,14 +8,15 @@ import {Person} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
-export function Navbar(props) {
-    const {auth}=useSelector(store=>store);
+export function Navbar() {
+    const {auth,cart}=useSelector(store=>store);
     const navigate=useNavigate();
     const handleAvatar=()=>{
         if(auth.user?.role === "ROLE_CUSTOMER"){
             navigate("/my-profile")
         }else{
-            navigate("/admin/restaurant")
+            navigate("/my-profile")
+            // navigate("/admin/restaurant")
         }
     }
     return (
@@ -49,9 +50,9 @@ export function Navbar(props) {
                             </IconButton>
                     }
                 </div>
-                <div className=''>
-                    <IconButton>
-                        <Badge color="secondary" badgeContent={3}>
+                <div className="">
+                    <IconButton onClick={()=>navigate("/cart")}>
+                        <Badge color="secondary" badgeContent={cart.cart?.items.length}>
                             <ShoppingCartIcon sx={{fontSize: "1.5rem"}}>
                             </ShoppingCartIcon>
                         </Badge>

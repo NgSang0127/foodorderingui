@@ -31,7 +31,7 @@ const menuItemReducer=(state=initialState,action)=>{
             return {
                 ...state,
                 loading:false,
-                menuItems: [...state.menuItems,action.payload],
+                menuItems: action.payload,
             };
         case actionTypes.DELETE_MENU_ITEM_SUCCESS:
             return{

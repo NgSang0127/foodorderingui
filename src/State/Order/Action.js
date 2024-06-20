@@ -5,12 +5,13 @@ import {
     GET_USER_ORDERS_REQUEST,
     GET_USER_ORDERS_SUCCESS
 } from "./ActionType";
+import {api} from "../../component/config/api";
 
 export const createOrder=(reqData)=>{
     return async(dispatch)=>{
         dispatch({type:CREATE_ORDER_REQUEST});
         try{
-            const {data}=await api.post(`/api/order/`,reqData.order,{
+            const {data}=await api.post(`/api/order`,reqData.order,{
                 headers:{
                     Authorization:`Bearer ${reqData.jwt}`,
                 }
@@ -18,7 +19,7 @@ export const createOrder=(reqData)=>{
             // if(data.payment_url){
             //     window.location.href=data.payment_url;
             // }
-            console.log("Created order data");
+            console.log("Created order data",data);
             dispatch({type:CREATE_ORDER_SUCCESS,payload:data});
         }catch(e){
             console.log("Catch error",e);

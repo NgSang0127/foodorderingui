@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {Box, Button, Card, Divider, Grid, Modal, TextField, Typography} from "@mui/material";
 import CartItem from "./CartItem";
 import AddressCart from "./AddressCart";
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
+import {useDispatch, useSelector} from "react-redux";
+import {findCart} from "../../State/Cart/Action";
+import {createOrder} from "../../State/Order/Action";
 
 export const style = {
     position: 'absolute',
@@ -29,7 +32,6 @@ const validationSchema=Yup.object().shape({
     pincode:Yup.number().required("Pin code is required"),
     city:Yup.string().required("City is required")
 });
-const items = [1, 1];
 const Cart = () => {
     const createOrderUsingSelectedAddress = () => {
 
@@ -38,18 +40,42 @@ const Cart = () => {
         setOpen(true);
     };
     const [open, setOpen] = React.useState(false);
+    const dispatch = useDispatch();
+    const { cart, auth } = useSelector((store) => store);
+
+
     const handleClose = () => setOpen(false);
     const handleSubmit=(values)=>{
-        console.log("Form value",values);
+        const data ={
+            jwt:localStorage.getItem("jwt"),
+            order:{
+                restaurantId:cart.cartItems[0].food?.restaurant.id,
+                delivery:{
+                    fullName: auth.user?.fullName,
+                    streetAddress: values.streetAddress,
+                    city: values.city,
+                    state:values.state,
+                    postalCode:values.pincode,
+                    country:"Viet Nam"
+
+                }
+            }
+        }
+        dispatch(createOrder(data));
     };
 
+    useEffect(() => {
+        dispatch(findCart(localStorage.getItem("jwt")));
+        console.log("cart",cart);
+    }, []);
+
     return (
-        <>
+        <Fragment>
             <main className="lg:flex justify-between">
                 <section className="lg:w-[30%] space-y-6 lg:min-h-screen pt-10">
                     {
-                        items.map((item) => (
-                            <CartItem/>
+                        cart.cartItems.map((item) => (
+                            <CartItem item={item} />
                         ))
                     }
                     <Divider/>
@@ -58,7 +84,7 @@ const Cart = () => {
                         <div className="space-y-3">
                             <div className=" flex justify-between text-gray-300">
                                 <p>Item Total</p>
-                                <p>500.000 VND</p>
+                                <p>{cart.cart.total}$</p>
                             </div>
                             <div className=" flex justify-between text-gray-300">
                                 <p>Delivery Fee</p>
@@ -72,7 +98,7 @@ const Cart = () => {
                         </div>
                         <div className="flex justify-between text-gray-400">
                             <p>Total pay</p>
-                            <p>1.000.000 VND</p>
+                            <p>{cart.cart.total}$</p>
                         </div>
 
                     </div>
@@ -195,7 +221,7 @@ const Cart = () => {
                     </Formik>
                 </Box>
             </Modal>
-        </>
+        </Fragment>
     );
 };
 

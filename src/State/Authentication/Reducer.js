@@ -21,7 +21,7 @@ export const authReducer = (state = initialState, action) => {
             return {...state, isLoading: false, jwt: action.payload, success: "Register Success"};
 
         case actionTypes.GET_USER_SUCCESS:
-            return {...state, isLoading: false, user: action.payload};
+            return {...state, isLoading: false, user: action.payload,favorites: action.payload.favorites};
         case actionTypes.ADD_TO_FAVORITE_SUCCESS:
             return {
                 ...state,
