@@ -4,11 +4,18 @@ import {Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router-dom";
 import {loginUser} from "../../State/Authentication/Action";
 import {useDispatch} from "react-redux";
+import * as Yup from "yup";
 
 const initialValues = {
     email: "",
     password: ""
 }
+const validationSchema = Yup.object({
+    email: Yup.string()
+        .email("Invalid email format")
+        .required("Email is required"),
+    password: Yup.string().required("Password is required"),
+});
 const LoginForm = () => {
     const handleSubmit = (values) => {
         dispatch(loginUser({userData: values,navigate}))
@@ -23,7 +30,9 @@ const LoginForm = () => {
             </Typography>
             <Formik
                 onSubmit={handleSubmit}
+                validationSchema={validationSchema}
                 initialValues={initialValues}>
+
                 <Form>
                     <Field
                         as={TextField}

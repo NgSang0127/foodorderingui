@@ -15,7 +15,7 @@ export const registerUser=(reqData)=>async(dispatch)=>{
         const {data}=await api.post(`${API_URL}/auth/signup`,reqData.userData);
         if(data.jwt)localStorage.setItem("jwt",data.jwt);
         if(data.role=== "ROLE_RESTAURANT_OWNER"){
-            reqData.navigate("/admin/restaurant");
+            reqData.navigate("/admin/restaurants");
         }else{
             reqData.navigate("/")
         }
@@ -34,7 +34,7 @@ export const loginUser = (reqData) => async (dispatch) => {
         const { data } = await api.post(`${API_URL}/auth/signin`, reqData.userData);
         if (data.jwt) localStorage.setItem("jwt", data.jwt);
         if (data.role === "ROLE_RESTAURANT_OWNER") {
-            reqData.navigate("/admin/restaurant");
+            reqData.navigate("/admin/restaurants");
         } else {
             reqData.navigate("/");
         }

@@ -13,7 +13,7 @@ export const updateOrdersStatus=({orderId,orderStatus,jwt})=>{
         dispatch({type:UPDATE_ORDER_STATUS_REQUEST});
 
         try{
-            const {data}=await api.put(`/api/admin/orders/${orderId}/${orderStatus}`,{},{
+            const {data}=await api.put(`/api/admin/order/${orderId}/${orderStatus}`,{},{
                 headers:{
                     Authorization:`Bearer ${jwt}`
                 },

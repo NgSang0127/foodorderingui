@@ -15,8 +15,7 @@ export function Navbar() {
         if(auth.user?.role === "ROLE_CUSTOMER"){
             navigate("/my-profile")
         }else{
-            navigate("/my-profile")
-            // navigate("/admin/restaurant")
+            navigate("/admin/restaurants")
         }
     }
     return (

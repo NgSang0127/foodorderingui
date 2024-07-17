@@ -4,6 +4,7 @@ import {Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {registerUser} from "../../State/Authentication/Action";
+import * as Yup from "yup";
 
 const initialValues = {
     fullName:"",
@@ -11,6 +12,16 @@ const initialValues = {
     password: "",
     role:"ROLE_CUSTOMER"
 }
+const validationSchema = Yup.object({
+    fullName: Yup.string().required("Full Name is required"),
+    email: Yup.string()
+        .email("Invalid email format")
+        .required("Email is required"),
+    password: Yup.string()
+        .min(6, "Password must be at least 8 characters")
+        .required("Password is required"),
+    role: Yup.string().required("Type is required"),
+});
 const RegisterForm = () => {
     const navigate=useNavigate();
     const dispatch=useDispatch();
@@ -25,7 +36,9 @@ const RegisterForm = () => {
             </Typography>
             <Formik
                 onSubmit={handleSubmit}
+                validationSchema={validationSchema}
                 initialValues={initialValues}>
+
                 <Form>
                     <Field
                         as={TextField}

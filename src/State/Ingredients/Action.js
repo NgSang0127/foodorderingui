@@ -15,6 +15,10 @@ export const getIngredientsOfRestaurant=({id,jwt})=>{
                     Authorization:`Bearer ${jwt}`,
                 }
             });
+            dispatch({
+                type:GET_INGREDIENTS,
+                payload:data
+            });
             console.log("Get all ingredients",data);
         }catch(e){
             console.log("Catch error",e);
